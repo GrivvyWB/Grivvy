@@ -1,0 +1,35 @@
+modules = ["nodejs-24", "python-base-3.13", "postgresql-16"]
+
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
+
+[workflows]
+runButton = "Project"
+
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
+
+[nix]
+channel = "stable-25_05"
+
+[userenv]
+
+[userenv.development]
+FIAREP_ENABLE_STAGING_PUSH_SMOKE_TESTS = "true"
+FIAREP_STAGING_TENANT_ID = "staging-smoke"
+
+[userenv.shared]
+FIAREP_PLATFORM_OWNER_NAME = "FIAREP Platform Owner"
+
+[objectStorage]
+defaultBucketID = "replit-objstore-d0d51f06-5a7d-472d-8e7b-d71c48379baa"
